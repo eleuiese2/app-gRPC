@@ -5,7 +5,8 @@ metadata:
   namespace: sim-demo
 spec:
   serviceRef:
-    name: app1
-    port: 80
+    name: app1-service
+    port: 50051
   targetGroupARN: arn:aws:elasticloadbalancing:us-east-1:185542568106:targetgroup/sim-demo-grpc-tg/42f47c516aafeae4
   targetType: ip
+

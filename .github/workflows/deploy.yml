@@ -1,0 +1,45 @@
+name: Deploy gRPC Apps
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_TF_WRITER }}
+          role-duration-seconds: 3600
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Push app1
+        run: |
+          docker build -t app1 ./app1
+          docker tag app1:latest ${{ steps.login-ecr.outputs.registry }}/app1:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/app1:latest
+
+      - name: Build & Push app2
+        run: |
+          docker build -t app2 ./app2
+          docker tag app2:latest ${{ steps.login-ecr.outputs.registry }}/app2:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/app2:latest
+
+      - name: Setup kubectl
+        run: |
+          aws eks update-kubeconfig --name sim-demo-eks-cluster --region us-east-1
+
+      - name: Deploy to EKS
+        run: |
+          kubectl apply -f manifests/

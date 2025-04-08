@@ -30,11 +30,14 @@ metadata:
   namespace: sim-demo
   labels:
     app: app2
+  annotations:
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
 spec:
   selector:
     app: app2
   ports:
-    - port: 50051
+    - port: 80
       targetPort: 50051
       protocol: TCP
   type: ClusterIP

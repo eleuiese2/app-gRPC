@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: app2
-          image: <AWS_ECR_REPO_URL>/app2:latest
+          image: 185542568106.dkr.ecr.us-east-1.amazonaws.com/sim-ecr/app2:latest
           ports:
             - containerPort: 50051
           resources:

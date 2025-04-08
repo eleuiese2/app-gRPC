@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: app1
   namespace: sim-demo
+spec:
   replicas: 1
   selector:
     matchLabels:
@@ -39,4 +40,4 @@ spec:
     - port: 80
       targetPort: 50051
       protocol: TCP
-  type: NodePort
+  type: ClusterIP
